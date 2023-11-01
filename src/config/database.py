@@ -10,12 +10,12 @@ db = SQLAlchemy()
 class Module(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     course_code=db.Column(db.String(7), unique=True, nullable=False)
-    course_title=db.Column(db.Text(80), unique=True, nullable=False)
+    course_title=db.Column(db.String(80), unique=True, nullable=False)
     created_time=db.Column(db.DateTime, default=datetime.now())
     updated_time=db.Column(db.DateTime, onupdate=datetime.now())
-    venue= db.relationship('Venue', backref="module")
-    enrollment = db.relationship('Enrollment', backref="module")
-    lecturer = db.relationship('Lecturer', backref="module")
+    # venue= db.relationship('Venue', backref="module")
+    # enrollment = db.relationship('Enrollment', backref="module")
+    # lecturer = db.relationship('Lecturer', backref="module")
 
    
 
@@ -36,15 +36,17 @@ class Venue(db.Model):
 
 
 class Lecturer(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(80), nullable=False)
-    last_name = db.Column(db.String(80), nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    userId = db.Column(db.String(7), unique=True)
+    firstName = db.Column(db.String(80), nullable=False)
+    lastName = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(80), nullable= False)
-    lesson_id=db.Column(db.Integer, db.ForeignKey('module.id'))
+    password = db.Column(db.String(80), nullable=False)
+    # lesson_id=db.Column(db.Integer, db.ForeignKey('module.id'))
 
 
     def __repr__(self) -> str:
-        return 'Lecturers>>> {self.first_name} {self.last_name}'
+        return 'Lecturers>>> {self.firstName} {self.lastName}'
     
 
 class Attendance(db.Model):
@@ -72,8 +74,13 @@ class Attendance(db.Model):
         return 'Attendance>>> {self.id}'
     
 class Enrollment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    course = db.Column(db.Integer,db.ForeignKey('module.id'))
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    courseTitle = db.Column(db.String(80),nullable=False)
+    courseId = db.Column(db.String(80), nullable=False)
+    studentId = db.Column(db.String(8), nullable=False, unique=True)
+    password= db.Column(db.String(80), nullable=False, unique=True)
+    studentEmail = db.Column(db.String(80), nullable=False, unique=True)
+    studentName= db.Column(db.String(80), nullable=False)
 
     def __repr__(self) -> str:
         return 'Attendance>>> {self.id}'
@@ -81,10 +88,16 @@ class Enrollment(db.Model):
 
 class Semester(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    session_name = db.Column(db.String(80), nullable=False)
+    semesterId = db.Column(db.String(8), nullable=False)
+    semesterName = db.Column(db.String(80), nullable=False)
+    semesterCourseId = db.Column(db.String(7), unique=True, nullable=False)
+    semesterCourseTitle = db.Column(db.String(7), unique=True, nullable=False)
+    startDate =  db.Column(db.String(10), nullable=False)
+    endDate =  db.Column(db.String(10), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('registrant.id'))
 
     def __repr__(self) -> str:
-        return 'Attendance>>> {self.id}'
+        return 'Semester>>> {self.id}'
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -94,8 +107,41 @@ class Student(db.Model):
     studentDepartment = db.Column(db.String(80), nullable=False)
     studentEmail= db.Column(db.String(120), unique=True, nullable=False)
     studentCategory = db.Column(db.String(80), nullable = False)
+   
 
     def __repr__(self) -> str:
         return 'Students>>> {self.id}'
+    
+class Registrant(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    registrantId = db.Column(db.String(7), unique=True, nullable=False)
+    registrantFirstname = db.Column(db.String(80), nullable=False)
+    registrantLastname = db.Column(db.String(80), nullable=False)
+    registrantDepartment = db.Column(db.String(80), nullable=False)
+    registrantEmail = db.Column(db.String(120), nullable= False, unique=True)
+    password= db.Column(db.String(80), nullable=False)
+    registrantCategory = db.Column(db.String(80), nullable=False)
+    semester= db.relationship('Semester', backref="registrant")
+    
+
+    def __repr__(self) -> str:
+        return 'Registrant >>>> {self.registrantId}'
+    
+class Vendor(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    vendorId =  db.Column(db.String(80), nullable=False)
+    vendorName = db.Column(db.String(80), nullable=False)
+    vendorEmail = db.Column(db.String(120), nullable= False, unique=True)
+    vendorAddress = db.Column(db.String(120), nullable= False)
+    vendorPhone = db.Column(db.String(80), nullable=False)
+    vendorProduct = db.Column(db.String(120), nullable= False)
+    password= db.Column(db.String(80), nullable=False)
+
+    def __repr__(self) -> str:
+        return 'Vendor>>> {self.id}'
+
+    
+
+
 
 
