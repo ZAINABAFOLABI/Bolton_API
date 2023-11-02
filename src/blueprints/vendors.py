@@ -149,10 +149,7 @@ def selectedVendor(vendorId):
 @vendors.put('/edit/<vendorId>')
 def updateVendorRecord(vendorId):
      actualVendor = Vendor.query.filter_by(vendorId=vendorId).first()
-     if Vendor.query.filter_by(vendorId=vendorId).first() is None:
-        return jsonify({
-            "error": "Vendor Id does not exist"
-        }), HTTP_400_BAD_REQUEST
+    
      vendorId = request.get_json().get('vendorId', ' ')
      vendorName = request.get_json().get('vendorName', ' ')
      vendorEmail = request.get_json().get('vendorEmail', ' ')
@@ -161,10 +158,10 @@ def updateVendorRecord(vendorId):
      vendorProduct = request.get_json().get('vendorProduct', ' ')
      password = request.get_json().get('password', ' ')
 
-    #  if Vendor.query.filter_by(vendorId=vendorId).first() is not None:
-    #         return jsonify({
-    #             'error': " Duplicate vendor Id is not allowed"
-    #         }), HTTP_409_CONFLICT
+     if Vendor.query.filter_by(vendorId=vendorId).first() is None:
+            return jsonify({
+                'error': " Vendor Id is not allowed"
+            }), HTTP_409_CONFLICT
         
     #  if Vendor.query.filter_by(vendorName= vendorName).first() is not None:
     #         return jsonify({
@@ -176,7 +173,11 @@ def updateVendorRecord(vendorId):
     #             'error': "Duplicate Vendor phone number is not allowed"
     #         }), HTTP_409_CONFLICT
         
-        
+     if Vendor.query.filter_by(vendorId=vendorId).first() is None:
+        return jsonify({
+            "error": "Vendor Id does not exist"
+        }), HTTP_400_BAD_REQUEST   
+     
      if not validators.email(vendorEmail) or " " in vendorEmail:
             return jsonify({'error': "Vendor email is invalid"
             }), HTTP_400_BAD_REQUEST
