@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from src.config.database import Vendor, db
+from src.config.database import Vendor, Category, db
 import validators
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -241,3 +241,39 @@ def updateVendorRecord(vendorId):
             'vendorAddress': vendorAddress,
             'vendorPhone': vendorPhone
         }})
+
+# Product category get and post endpoint
+@vendors.route('/productCategory', methods=['POST','GET'])
+def productCategory():
+    if request.method == 'POST':
+        category = request.get_json().get('category', ' ')
+        if  Category.query.filter_by(category= category).first() is not None:
+            return jsonify({
+                'error': "Duplicate product category is not allowed"
+            }), HTTP_409_CONFLICT
+    
+        if len(category)<3:
+            return jsonify({
+              'error': "Invalid product category"
+         }), HTTP_400_BAD_REQUEST
+    
+        availableCategory =  Category(category=category)
+        db.session.add(availableCategory)
+        db.session.commit()   
+
+        return jsonify({
+            'message': "Product category creation successful",
+            'productCategory' :{
+            'category': category
+        }})
+    else:
+        availableCategory =  Category.query.filter_by().all()
+        data=[]
+        for session in availableCategory:
+            data.append({
+                'category': session.category,                
+                
+            })
+
+        return jsonify({'data':data}), HTTP_200_OK
+     

@@ -129,16 +129,24 @@ class Registrant(db.Model):
     
 class Vendor(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    vendorId =  db.Column(db.String(80), nullable=False)
+    vendorId =  db.Column(db.String(80), nullable=False, unique=True)
     vendorName = db.Column(db.String(80), nullable=False)
     vendorEmail = db.Column(db.String(120), nullable= False, unique=True)
     vendorAddress = db.Column(db.String(120), nullable= False)
-    vendorPhone = db.Column(db.String(80), nullable=False)
+    vendorPhone = db.Column(db.String(80), nullable=False,  unique=True)
     vendorProduct = db.Column(db.String(120), nullable= False)
     password= db.Column(db.String(80), nullable=False)
 
     def __repr__(self) -> str:
         return 'Vendor>>> {self.id}'
+    
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    category = db.Column(db.String(80), nullable=False, unique=True)
+
+    def __repr__(self) -> str:
+        return 'Category>>> {self.id}'
 
     
 
