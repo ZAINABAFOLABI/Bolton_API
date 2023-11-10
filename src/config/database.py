@@ -147,6 +147,17 @@ class Category(db.Model):
 
     def __repr__(self) -> str:
         return 'Category>>> {self.id}'
+    
+
+class Contact(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), nullable = False)
+    email = db.Column(db.String(120), nullable = False)
+    phone = db.Column(db.String(13), nullable = False)
+    message = db.Column(db.String(1000), nullable = False)
+
+    def __repr__(self) -> str:
+        return 'Contact>>> {self.id}'
 
     
 

@@ -9,6 +9,7 @@ from src.blueprints.modules import modules
 from src.blueprints.semester import semester
 from src.blueprints.students import students
 from src.blueprints.vendors import vendors
+from src.blueprints.contact import contact
 from src.config.database import db
 from flask_jwt_extended import JWTManager
 
@@ -42,6 +43,7 @@ def create_app(test_config=None):
     app.register_blueprint(lecturers)
     app.register_blueprint(students)
     app.register_blueprint(vendors)
+    app.register_blueprint(contact)
 
   
     return app
