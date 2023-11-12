@@ -53,7 +53,7 @@ def session():
             'name': name,
             'phone': phone,
             'email': email,
-            'phone': phone,
+            'message': message
         }})
     else:
         availableSessions = Contact.query.filter_by().all()
