@@ -68,6 +68,33 @@ def session():
             })
 
         return jsonify({'data':data}), HTTP_200_OK
+
+@contact.delete('/delete/<name>')
+def deleteMessage(name):
+    if Contact.query.filter_by(name=name).first() is None:
+        return jsonify({
+            'error': "The name does not exist."
+        }),HTTP_400_BAD_REQUEST
+    Contact.query.filter_by(name=name).delete()
+    db.session.commit()
+    return {"Message deleted" : f"message: {name}  ' message was deleted'"}, HTTP_200_OK
+
+@contact.get('/<name>')
+def get_one_message(name):
+    wantedMessage = Contact.query.filter_by(name=name).all()
+    data = []
+    for message in wantedMessage:
+        data.append({
+            'name': message.name,
+            'phone': message.phone,
+            'email': message.email,
+            'message': message.message
+        })
+    return jsonify ({'data':data}), HTTP_200_OK
+
+
+
+
     
 
         
